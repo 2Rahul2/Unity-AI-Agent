@@ -13,7 +13,7 @@ public class AI_Client
         httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Add("x-goog-api-key", apiKey);
     }
-    public async Task<string> SendRequestAsync(string prompt, List<ToolListToSend> tools = default)
+    public async Task<string> SendRequestAsync(string prompt, string responseFormat, List<ToolListToSend> tools = default) 
     {
         string finalPrompt = @$"
         You are a game assistant. You can choose tools from the list, you can use tools multiple times and respond strictly in JSON format.
@@ -22,13 +22,11 @@ public class AI_Client
         ### Rules:
         - Always respond in JSON format.
         - Format:
-        {{
-            ""prompt"": ""Your Answer Here"",
-            ""actions"": [{{ ""tool"": ""<toolName>"", ""parameters"": {{ ... }} }}]
-        }}
+        {responseFormat}
         ### User Prompt:
         {prompt}
         ";
+        Debug.Log("Final Prompt Sent to AI: " + finalPrompt);
         var requestBody = new
         {
             contents = new[]

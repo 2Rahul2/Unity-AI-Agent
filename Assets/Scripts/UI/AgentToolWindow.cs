@@ -20,6 +20,8 @@ public class AgentToolWindow : EditorWindow
     // ==== Animation Tool ====
     private GameObject animationTarget;
     private string animationPrompt = "";
+    private float animationDuration = 2f; // default duration
+
 
     // ==== AI Client Setup ====
     private AI_Client aiClient;
@@ -193,6 +195,9 @@ public class AgentToolWindow : EditorWindow
             // Prompt field
             animationPrompt = EditorGUILayout.TextField("Prompt:", animationPrompt);
 
+            // Duration input (float)
+            animationDuration = EditorGUILayout.FloatField("Animation Duration (sec):", animationDuration);
+
             GUILayout.Space(5);
             if (GUILayout.Button("Generate Animation", GUILayout.Height(30)))
             {
@@ -204,9 +209,14 @@ public class AgentToolWindow : EditorWindow
                 {
                     EditorUtility.DisplayDialog("Error", "Please enter an animation prompt!", "OK");
                 }
+                else if (animationDuration <= 0)
+                {
+                    EditorUtility.DisplayDialog("Error", "Please enter a valid animation duration greater than 0!", "OK");
+                }
                 else
                 {
-                    Debug.Log($"🎞️ Generating animation for '{animationTarget.name}' with prompt: '{animationPrompt}'");
+                    Debug.Log($"🎞️ Generating animation for '{animationTarget.name}' with prompt: '{animationPrompt}' (Duration: {animationDuration} sec)");
+                    _ = AnimationGeneratorTool.GenerateAnimation(animationTarget, animationPrompt, animationDuration);
                     // TODO: Add animation generation logic using AI
                 }
             }
@@ -214,4 +224,5 @@ public class AgentToolWindow : EditorWindow
 
         EditorGUILayout.EndVertical();
     }
+
 }

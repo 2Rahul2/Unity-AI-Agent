@@ -157,8 +157,12 @@ public static class LevelDesignerTool
         string prompt = $"Generate a level layout based on the following design prompt:\n{designPrompt}\n" +
                         "You have access to the following assets:\n" +
                         $"{assetContent}\n";
+        string responseFormat = @"{
+            ""prompt"": ""Your Answer Here"",
+            ""actions"": [{{ ""tool"": ""<toolName>"", ""parameters"": {{ ... }} }}]
+        }";
 
-        string response = await client.SendRequestAsync(prompt, tools);
+        string response = await client.SendRequestAsync(prompt, responseFormat, tools);
         AI_Client.ProcessResponse(response);
 
         // Debug.Log("Level Layout Response: " + response);
